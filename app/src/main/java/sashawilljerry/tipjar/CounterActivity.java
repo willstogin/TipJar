@@ -2,12 +2,32 @@ package sashawilljerry.tipjar;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
+
 
 import java.util.Date;
 import java.util.Properties;
+
+import java.text.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
 
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -16,17 +36,80 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+
+
 /**
  * Created by Sasha on 11/22/2014.
  */
 
+
 public class CounterActivity extends ActionBarActivity {
 
+    private String accessToken;
+
+    public CounterActivity(String token) {
+        super();
+        accessToken = token;
+    }
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.counter_activity);
+        String input;
+        String url;
+        String afterDate;
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM.dd'-'hh:mm:ss");
+        afterDate = ft.format(new Date());
+        while(true) {
+             url = "https://api.venmo.com/v1/"+accessToken+"?after=" + afterDate;
+             input = readPage(url);
+             try {
+                 JSONObject json = new JSONObject(input);
+             } catch (Exception e) {
+             e.printStackTrace();
+             }
+                try {
+                Thread.sleep(30000);
+
+            } catch (InterruptedException ex){
+                Thread.currentThread().interrupt();
+
+            }
+
+        }
+
     }
+
+    public String readPage(String url) {
+        StringBuilder builder = new StringBuilder();
+        HttpClient client = new DefaultHttpClient();
+        HttpGet httpGet = new HttpGet(url);
+
+        try {
+            HttpResponse response = client.execute(httpGet);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+                InputStream content = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
+            } else {
+                Log.e(JSONObject.class.toString(), "Failed to download file");
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return builder.toString();
+
+    }
+
+
 
 
     @Override
@@ -51,7 +134,7 @@ public class CounterActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void sendMessage(View view) {
+    public void sendMessage() {
         System.out.println("here2");
         Properties props = new Properties();
         props.put("mail.smtp.host", "in.mailjet.com");
