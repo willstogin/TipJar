@@ -10,24 +10,47 @@
     android:paddingBottom="16dp">
 
     <EditText
-        android:id="@+id/subject_line"
+        android:id="@+id/emailsubject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/emailsubject"
         android:layout_weight="0"
         android:inputType="text" />
     <EditText
+        android:id="@+id/emailtext"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:hint="@string/emailtext"
         android:inputType="textMultiLine"
         />
     <EditText
+        android:id="@+id/threshold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollHorizontally="false"
         android:hint="@string/threshold"
         android:inputType="number"
+        />
+    <EditText
+        android:id="@+id/filepath"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter the path of the desired file."
+        android:inputType="text"
+        />
+    <EditText
+        android:id="@+id/accesstoken"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your Venmo access token."
+        android:inputType="text"
+        android:scrollHorizontally="true"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:hint="Put out the tip jar!"
+        android:onClick="bundleSettings"
         />
 
 </LinearLayout>

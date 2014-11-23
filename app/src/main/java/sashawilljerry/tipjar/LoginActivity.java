@@ -56,6 +56,7 @@ public class LoginActivity extends ActionBarActivity {
         EditText editText1 = (EditText) findViewById(R.id.email_address);
         String emailaddress = editText1.getText().toString();
         login2settings.putExtra(LOGIN2SETTINGS, emailaddress);
+        startActivity(login2settings);
     }
 
 
