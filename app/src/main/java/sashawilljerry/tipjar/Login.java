@@ -43,8 +43,7 @@ public class Login extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void sendMessage(View view)
-    {
+    public void sendMessage(View view) {
         Properties props = new Properties();
         props.put("mail.smtp.host", "in-v3.mailjet.com");
         Session session = Session.getInstance(props, null);
