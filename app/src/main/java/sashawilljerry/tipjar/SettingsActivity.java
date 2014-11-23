@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 import java.util.Date;
 import java.util.Properties;
@@ -51,6 +53,38 @@ public class SettingsActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void bundleSettings(View view) {
+        Intent settings2counter = new Intent(this, CounterActivity.class);
+        Bundle fields = new Bundle();
+
+        Intent login2settings = getIntent();
+        String emailaddress = login2settings.getStringExtra(LoginActivity.LOGIN2SETTINGS);
+        fields.putString("EMAILADDRESS", emailaddress);
+
+        EditText emailsubject = (EditText) findViewById(R.id.emailsubject);
+        String email_subject = emailsubject.getText().toString();
+        fields.putString("EMAILSUBJECT", email_subject);
+
+        EditText emailtext = (EditText) findViewById(R.id.emailtext);
+        String email_text = emailtext.getText().toString();
+        fields.putString("EMAILTEXT", email_text);
+
+        EditText threshold = (EditText) findViewById(R.id.threshold);
+        String cash_threshold = threshold.getText().toString();
+        fields.putString("THRESHOLD", cash_threshold);
+
+        EditText filepath = (EditText) findViewById(R.id.filepath);
+        String file_path = filepath.getText().toString();
+        fields.putString("FILEPATH", file_path);
+
+        EditText accesstoken = (EditText) findViewById(R.id.accesstoken);
+        String access_token = accesstoken.getText().toString();
+        fields.putString("ACCESSTOKEN", access_token);
+
+        settings2counter.putExtras(fields);
+        startActivity(settings2counter);
     }
 
 
