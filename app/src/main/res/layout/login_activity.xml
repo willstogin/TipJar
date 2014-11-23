@@ -10,16 +10,18 @@
     android:orientation="horizontal">
     
     <EditText
+        android:id="@+id/email_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Please enter your email."
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:inputType="textEmailAddress" />
     <!-- This is the email used to send out from, and eventually to log into our servers. -->
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Sign in"
-        android:onClick="Test1"/>
+        android:onClick="saveEmail"/>
 
 </LinearLayout>

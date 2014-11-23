@@ -20,10 +20,16 @@
             android:label="Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            </intent-filter></activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName=".LoginActivity"></activity>
+        <activity
+            android:name=".CounterActivity"
+            android:label="Counter"
+            android:parentActivityName=".SettingsActivity"></activity>
     </application>
 
 </manifest>

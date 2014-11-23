@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.Date;
 import java.util.Properties;
@@ -50,7 +51,7 @@ public class CounterActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void sendMessage() {
+    public void sendMessage(View view) {
         System.out.println("here2");
         Properties props = new Properties();
         props.put("mail.smtp.host", "in.mailjet.com");

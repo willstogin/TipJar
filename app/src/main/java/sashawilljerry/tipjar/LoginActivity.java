@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.content.Intent;
+import android.widget.EditText;
 
 import java.util.Date;
 import java.util.Properties;
@@ -18,6 +19,8 @@ import javax.activation.DataHandler.*;
 
 
 public class LoginActivity extends ActionBarActivity {
+
+    public final static String LOGIN2SETTINGS = "sashawilljerry.tipjar.LOGIN2SETTINGS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,51 +51,13 @@ public class LoginActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onButtonPressed(View view) {
-        System.out.println("Here");
-        sendMessage();
+    public void saveEmail(View view) {
+        Intent login2settings = new Intent(this, CounterActivity.class);
+        EditText editText1 = (EditText) findViewById(R.id.email_address);
+        String emailaddress = editText1.getText().toString();
+        login2settings.putExtra(LOGIN2SETTINGS, emailaddress);
     }
 
-    public void sendMessage() {
-        System.out.println("here2");
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "in.mailjet.com");
-        props.put ("mail.smtp.socketFactory.port", "465");
-        props.put ("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.put ("mail.smtp.auth", "true");
-        props.put ("mail.smtp.port", "465");
-        System.out.println("here3");
-                final Session session = Session.getInstance(props,
-                new javax.mail.Authenticator ()
-                {
-                    protected PasswordAuthentication getPasswordAuthentication ()
-                    {
-                        return new PasswordAuthentication ("79b28e261e95381c54fba0078672d434", "94cc9e45a80b3f07fa0a10ded9fea14d");
-                    }
-                });
-        System.out.println("here4");
-        try {
-            Thread thread = new Thread(new Runnable(){
-                @Override
-                public void run() {
-                   try{
-                       MimeMessage msg = new MimeMessage(session);
-                       System.out.println("here5");
-                       msg.setFrom(new InternetAddress("sasha.weiss@u.northwestern.edu"));
-                       msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("tipjar.wildhacks2@gmail.com"));
-                       msg.setSubject("Testing 1234");
-                       msg.setSentDate(new Date());
-                       msg.setText("This is a test email.\n");
-                       Transport.send(msg);
-                    } catch (Exception mex) {
-                        System.out.println("send failed, exception: " + mex);
-                    }
-                }
-            });
-            thread.start();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
+
 
 }
