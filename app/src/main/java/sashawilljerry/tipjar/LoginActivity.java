@@ -52,12 +52,12 @@ public class LoginActivity extends ActionBarActivity {
     }
 
     public void saveEmail(View view) {
-        Intent login2settings = new Intent(this, CounterActivity.class);
+        Intent login2settings = new Intent(this, SettingsActivity.class);
         EditText editText1 = (EditText) findViewById(R.id.email_address);
         String emailaddress = editText1.getText().toString();
         login2settings.putExtra(LOGIN2SETTINGS, emailaddress);
         startActivity(login2settings);
-    }
+}
 
 
 

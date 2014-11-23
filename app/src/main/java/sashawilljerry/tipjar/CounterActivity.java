@@ -31,13 +31,19 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-
+import javax.mail.internet.MimeMultipart;
 
 
 /**
@@ -77,28 +83,28 @@ public class CounterActivity extends ActionBarActivity {
         accessToken = fields.getString("ACCESSTOKEN");
 
 
-        while(true) {
+        //while(true) {
              afterDate = ft.format(new Date());
-            try {
-                Thread.sleep(30000);
+            //try {
+           //     Thread.sleep(3000);
 
-            } catch (InterruptedException ex){
-                Thread.currentThread().interrupt();
+            //} catch (InterruptedException ex){
+            //    Thread.currentThread().interrupt();
 
-            }
+            //}
              //url = "https://api.venmo.com/v1/"+accessToken+"?after=" + afterDate;
-             url = "https://api.venmo.com/v1/"+accessToken+"?limit=3";
-             input = readPage(url);
-             new AlertDialog.Builder(this).setTitle("Derp").setMessage(input);
-             try {
-                  json = new JSONObject(input);
-             } catch (Exception e) {
-             e.printStackTrace();
-             }
+             //url = "https://api.venmo.com/v1/"+accessToken+"?limit=3";
+             //input = readPage(url);
+             new AlertDialog.Builder(this).setTitle("Derp").setMessage("sup");
+             //try {
+             //     json = new JSONObject(input);
+            // } catch (Exception e) {
+            // e.printStackTrace();
+             //}
                 //parse for info and send the message(s)
 
 
-        }
+        //}
 
     }
 
@@ -176,13 +182,56 @@ public class CounterActivity extends ActionBarActivity {
                 @Override
                 public void run() {
                     try{
-                        MimeMessage msg = new MimeMessage(session);
+                        // Create a default MimeMessage object.
+                        Message message = new MimeMessage(session);
+
+                        // Set From: header field of the header.
+                        message.setFrom(new InternetAddress(senderAddress));
+
+                        // Set To: header field of the header.
+                        message.setRecipients(Message.RecipientType.TO,
+                                InternetAddress.parse("tipjar.wildhacks2@gmail.com"));
+
+                        // Set Subject: header field
+                        message.setSubject(subject);
+
+                        // Create the message part
+                        BodyPart messageBodyPart = new MimeBodyPart();
+
+                        // Now set the actual message
+                        messageBodyPart.setText(text);
+
+                        // Create a multipar message
+                        Multipart multipart = new MimeMultipart();
+
+                        // Set text message part
+                        multipart.addBodyPart(messageBodyPart);
+
+                        // Part two is attachment
+                        messageBodyPart = new MimeBodyPart();
+                        String filename = filePath;
+                        DataSource source = new FileDataSource(filename);
+                        messageBodyPart.setDataHandler(new DataHandler(source));
+                        messageBodyPart.setFileName(filename);
+                        multipart.addBodyPart(messageBodyPart);
+
+                        // Send the complete message parts
+                        message.setContent(multipart);
+
+                        // Send message
+                        Transport.send(message);
+
+                        /*MimeMessage msg = new MimeMessage(session);
+                        Multipart multipart = new MimeMultipart();
+                        MimeBodyPart attachment = new MimeBodyPart();
+                        attachment.attachFile(filePath);
+                        MimeBodyPart messageBodyPart = new MimeBodyPart();
+                        messageBodyPart.setContent(msg, text);
                         msg.setFrom(new InternetAddress(senderAddress));
                         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("tipjar.wildhacks2@gmail.com"));
                         msg.setSubject(subject);
                         msg.setSentDate(new Date());
-                        msg.setText(text);
-                        Transport.send(msg);
+                        Transport.send(msg);*/
                     } catch (Exception mex) {
                         System.out.println("send failed, exception: " + mex);
                     }
