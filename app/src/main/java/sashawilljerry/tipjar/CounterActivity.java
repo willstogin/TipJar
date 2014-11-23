@@ -1,5 +1,6 @@
 package sashawilljerry.tipjar;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.*;
@@ -44,10 +45,15 @@ import javax.mail.internet.MimeMessage;
 
 
 public class CounterActivity extends ActionBarActivity {
-
+    private String senderAddress;
+    private String subject;
+    private String text;
+    private double threshold;
+    private String filePath;
     private String accessToken;
 
-    public CounterActivity(String token) {
+
+    public CounterActivity(String senderAddress, String subject, String text, double threshold, String filePath, String token) {
         super();
         accessToken = token;
     }
@@ -58,23 +64,27 @@ public class CounterActivity extends ActionBarActivity {
         String input;
         String url;
         String afterDate;
-        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM.dd'-'hh:mm:ss");
-        afterDate = ft.format(new Date());
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd'T'hh:mm:ss");
+        JSONObject json;
         while(true) {
-             url = "https://api.venmo.com/v1/"+accessToken+"?after=" + afterDate;
-             input = readPage(url);
-             try {
-                 JSONObject json = new JSONObject(input);
-             } catch (Exception e) {
-             e.printStackTrace();
-             }
-                try {
+             afterDate = ft.format(new Date());
+            try {
                 Thread.sleep(30000);
 
             } catch (InterruptedException ex){
                 Thread.currentThread().interrupt();
 
             }
+             url = "https://api.venmo.com/v1/"+accessToken+"?after=" + afterDate;
+             input = readPage(url);
+             new AlertDialog.Builder(this).setTitle("Derp").setMessage(input);
+             try {
+                  json = new JSONObject(input);
+             } catch (Exception e) {
+             e.printStackTrace();
+             }
+                //parse for info and send the message(s)
+
 
         }
 
