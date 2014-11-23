@@ -9,8 +9,8 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name="sashawilljerry.tipjar.MainActivity"
-            android:label="MainActivity">
+            android:name="sashawilljerry.tipjar.Login"
+            android:label="Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
