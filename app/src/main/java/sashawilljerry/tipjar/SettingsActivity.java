@@ -25,7 +25,7 @@ import javax.mail.internet.MimeMessage;
 public class SettingsActivity extends ActionBarActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
         Intent login2settings = getIntent();

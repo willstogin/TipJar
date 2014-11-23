@@ -1,6 +1,7 @@
 package sashawilljerry.tipjar;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.*;
@@ -53,9 +54,8 @@ public class CounterActivity extends ActionBarActivity {
     private String accessToken;
 
 
-    public CounterActivity(String senderAddress, String subject, String text, double threshold, String filePath, String token) {
+    public CounterActivity() {
         super();
-        accessToken = token;
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +66,17 @@ public class CounterActivity extends ActionBarActivity {
         String afterDate;
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd'T'hh:mm:ss");
         JSONObject json;
+
+        Intent setting2counter = getIntent();
+        Bundle fields = setting2counter.getExtras();
+        senderAddress = fields.getString("EMAILADDRESS");
+        subject = fields.getString("EMAILSUBJECT");
+        text = fields.getString("EMAILTEXT");
+        threshold = fields.getDouble("THRESHOLD");
+        filePath = fields.getString("FILEPATH");
+        accessToken = fields.getString("ACCESSTOKEN");
+
+
         while(true) {
              afterDate = ft.format(new Date());
             try {
@@ -75,7 +86,8 @@ public class CounterActivity extends ActionBarActivity {
                 Thread.currentThread().interrupt();
 
             }
-             url = "https://api.venmo.com/v1/"+accessToken+"?after=" + afterDate;
+             //url = "https://api.venmo.com/v1/"+accessToken+"?after=" + afterDate;
+             url = "https://api.venmo.com/v1/"+accessToken+"?limit=3";
              input = readPage(url);
              new AlertDialog.Builder(this).setTitle("Derp").setMessage(input);
              try {
@@ -145,14 +157,12 @@ public class CounterActivity extends ActionBarActivity {
     }
 
     public void sendMessage() {
-        System.out.println("here2");
         Properties props = new Properties();
         props.put("mail.smtp.host", "in.mailjet.com");
         props.put ("mail.smtp.socketFactory.port", "465");
         props.put ("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         props.put ("mail.smtp.auth", "true");
         props.put ("mail.smtp.port", "465");
-        System.out.println("here3");
         final Session session = Session.getInstance(props,
                 new javax.mail.Authenticator ()
                 {
@@ -161,19 +171,17 @@ public class CounterActivity extends ActionBarActivity {
                         return new PasswordAuthentication ("79b28e261e95381c54fba0078672d434", "94cc9e45a80b3f07fa0a10ded9fea14d");
                     }
                 });
-        System.out.println("here4");
         try {
             Thread thread = new Thread(new Runnable(){
                 @Override
                 public void run() {
                     try{
                         MimeMessage msg = new MimeMessage(session);
-                        System.out.println("here5");
-                        msg.setFrom(new InternetAddress("sasha.weiss@u.northwestern.edu"));
+                        msg.setFrom(new InternetAddress(senderAddress));
                         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("tipjar.wildhacks2@gmail.com"));
-                        msg.setSubject("Testing 1234");
+                        msg.setSubject(subject);
                         msg.setSentDate(new Date());
-                        msg.setText("This is a test email.\n");
+                        msg.setText(text);
                         Transport.send(msg);
                     } catch (Exception mex) {
                         System.out.println("send failed, exception: " + mex);
